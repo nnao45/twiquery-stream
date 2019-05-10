@@ -76,7 +76,7 @@ impl Executer {
         }
     }
 
-    pub fn exec_curl(self) -> Result<(), CurlError> {
+    fn exec_curl(self) -> Result<(), CurlError> {
         let row = self.data;
         let row_str = serde_json::to_string(&row).unwrap_or("{\"text\": \"error occured\"}".to_string());
         let mut bytes = row_str.as_bytes();
