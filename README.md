@@ -1,6 +1,6 @@
-[![docker](https://img.shields.io/badge/docker-0.1.0-blue.svg)](https://hub.docker.com/r/nnao45/twiquery-batch/tags)
+[![docker](https://img.shields.io/badge/docker-0.1.0-blue.svg)](https://hub.docker.com/r/nnao45/twiquery-stream/tags)
 
-# twiquery-batch
+# twiquery-stream
 
 ```shell
 $ cat <<EOF > ./.env                                                                                                                                        CONSUMER_KEY: <twitter consumer key>
