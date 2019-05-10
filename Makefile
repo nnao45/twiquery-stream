@@ -8,7 +8,7 @@ endif
 
 # general
 VERSION = $(shell ./version.sh)
-NAME = twiquery-batch
+NAME = twiquery-stream
 TARGET = $(NAME)
 DOCKER_REPO = nnao45
 
