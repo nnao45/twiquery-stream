@@ -7,6 +7,7 @@ extern crate twitter_stream_message;
 extern crate chrono;
 extern crate snailquote;
 extern crate curl;
+extern crate slog_scope;
 
 use curl::easy::Easy;
 use curl::Error as CurlError;
@@ -25,6 +26,8 @@ use snailquote::unescape;
 use exec as Exec;
 
 use serde::Deserialize;
+
+use slog::slog_crit;
 
 pub struct TwitterClient {
     config: Config,
@@ -49,7 +52,7 @@ impl TwitterClient {
         };
         match envy::from_env::<Config>() {
             Ok(config) => Ok(load_env(config)),
-            Err(e) => panic!("{:#?}", e),
+            Err(e) => Err(slog_crit!(slog_scope::logger(), "{:#?}", e)),
         }
     }
 
