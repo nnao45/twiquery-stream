@@ -1,31 +1,44 @@
 mod twitter_client;
 
-#[macro_use(slog_o,slog_b,slog_record,slog_record_static,slog_log,slog_trace,slog_debug,slog_info,slog_warn,slog_error,slog_crit,slog_kv)]
+#[macro_use(slog_o,slog_b,slog_record,slog_record_static,slog_debug,slog_log,slog_trace,slog_info,slog_warn,slog_error,slog_crit,slog_kv)]
 extern crate slog;
 
 extern crate slog_term;
+extern crate slog_async;
 extern crate slog_scope;
+extern crate slog_stdlog;
 
 use std::sync::Mutex;
 use slog::Drain;
 
-fn init_logger() -> slog::Logger {
+fn init_logger(filter_level: slog::Level) -> slog::Logger {
+    let drain = Mutex::new(
+                slog_term::FullFormat::new(
+                    slog_term::TermDecorator::new()
+                    .build()
+                )
+                    .use_local_timestamp()
+                    .build()
+                )
+                    .filter_level(filter_level);
+
     slog::Logger::root(
-        Mutex::new(
-            slog_term::FullFormat::new(
-                slog_term::TermDecorator::new().build()
-            ).build()
-        ).fuse(), slog_o!(
-            "version" => env!("CARGO_PKG_VERSION")
-        )
+        drain
+        .fuse(),
+        slog_o!(),
     )
 }
 
 fn main() {
-    let _scope_guard = slog_scope::set_global_logger(init_logger());
+    let config = twitter_client::Config::new().unwrap();
+    let filter_level = match config.is_debug {
+        false => slog::Level::Info,
+        true => slog::Level::Debug,
+    };
+    let logger = init_logger(filter_level);
+    let _scope_guard = slog_scope::set_global_logger(logger);
+    slog_stdlog::init().unwrap();
     slog_scope::scope(&slog_scope::logger().new(slog_o!("scope" => "1")), || {
-        if let Ok(tc) = twitter_client::TwitterClient::new() {
-            tc.watch();
-        }
+        twitter_client::TwitterClient::new(config).watch();
     });
 }

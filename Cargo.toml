@@ -1,12 +1,11 @@
 [package]
 name = "twiquery-batch"
-version = "0.1.0"
+version = "0.0.1"
 authors = ["nnao45 <n4sekai5y@gmail.com>"]
 edition = "2018"
 
 [dependencies]
 curl = "0.4.21"
-yaml-rust = "0.4"
 twitter-stream = "0.9"
 twitter-stream-message = "0.3.0"
 tweetust = "0.9"
@@ -15,7 +14,9 @@ snailquote = "0.2"
 futures = "0.1.4"
 envy = "0.4"
 slog = "2.4.1"
+slog-async = "2.3.0"
 slog-term = "2.4.0"
+slog-stdlog = "3.0.2"
 slog-scope = "4.1.1"
 
 # The core APIs, including the Serialize and Deserialize traits. Always

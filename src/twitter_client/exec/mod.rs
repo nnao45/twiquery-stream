@@ -10,6 +10,9 @@ use chrono::Local;
 
 use serde::{Serialize, Deserialize};
 
+use slog::{slog_info};
+//use slog_scope::debug;
+
 #[derive(Serialize, Deserialize, Debug)]
 pub struct TweiqueryData {
     attachments : Vec<TweiqueryDataAttachments>,
@@ -65,29 +68,28 @@ impl Executer {
 
     pub fn exec_curl(self) -> Result<(), CurlError> {
         let row = self.data;
-        let row_str = serde_json::to_string(&row).unwrap();
+        let row_str = serde_json::to_string(&row).unwrap_or("{\"message\": \"error occured\"}".to_string());
         let mut bytes = row_str.as_bytes();
         let mut easy = Easy::new();
-        easy.url(&self.slack_url).unwrap();
+        easy.url(&self.slack_url)?;
         let mut list = List::new();
-        list.append("Content-type: application/json").unwrap();
-        easy.http_headers(list).unwrap();
+        list.append("Content-type: application/json")?;
+        easy.http_headers(list)?;
 
-        easy.post(true).unwrap();
-        easy.post_field_size(bytes.len() as u64).unwrap();
+        easy.post(true)?;
+        easy.post_field_size(bytes.len() as u64)?;
 
         let mut transfer = easy.transfer();
         transfer.read_function(|buf| {
             Ok(bytes.read(buf).unwrap_or(0))
-        }).unwrap();
+        })?;
 
-        let result = transfer.perform()?;
-        Ok(result)
+        transfer.perform()
     }
 
     pub fn exec_console(self) -> Self{
         let data = &self.data.attachments[0];
-        println!("{} [{}]\n{}", data.title, data.footer, &data.fields[0].value);
+        slog_info!(slog_scope::logger(), "{} [{}]\n{}", data.title, data.footer, &data.fields[0].value) ;
         self
     }
 }
