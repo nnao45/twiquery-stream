@@ -1,6 +1,6 @@
-[![docker](https://img.shields.io/badge/docker-0.1.0-blue.svg)](https://hub.docker.com/r/nnao45/twiquery-stream/tags)
-
 # twiquery-stream
+
+[![docker](https://img.shields.io/badge/docker-0.1.1-blue.svg)](https://hub.docker.com/r/nnao45/twiquery-stream/tags)
 
 ```shell
 $ cat <<EOF > ./.env                                                                                                                                        CONSUMER_KEY: <twitter consumer key>
@@ -10,6 +10,7 @@ ACCESS_TOKEN_SECRET=<twitter access token secret>
 TRACK=<twitter search keyword>
 SLACK_URL=<post slack webhook url>
 IS_DEBUG=<true or false>
+POST_SLACK_ENABLED=<true or false>
 EOF
 $ make run
 ```

@@ -19,7 +19,7 @@ use exec as Exec;
 
 use serde::Deserialize;
 
-use slog::{slog_info, slog_error};
+use slog::{slog_error};
 
 #[derive(Deserialize, Debug)]
 pub struct Config {
@@ -30,6 +30,7 @@ pub struct Config {
     track: String,
     slack_url: String,
     pub is_debug: bool,
+    pub post_slack_enabled: bool,
 }
 
 impl Config {
@@ -70,8 +71,9 @@ impl TwitterClient {
             .flatten_stream()
             .for_each(move |json| {
                 if let Ok(StreamMessage::Tweet(tweet)) = StreamMessage::from_str(&json) {
-                    match Exec::Executer::new(
+                    Exec::Executer::new(
                         &self.config.slack_url,
+                        self.config.post_slack_enabled,
                         Exec::TweiqueryData::new(
                             &self.config.track,
                             &format!("{}", &tweet.user.name)[..],
@@ -81,11 +83,7 @@ impl TwitterClient {
                             &format!("{}", &tweet.id)[..],
                         ),
                     )
-                    .exec_console()
-                    .exec_curl() {
-                        Ok(()) => slog_info!(slog_scope::logger(), "Slack request done"),
-                        _ => slog_error!(slog_scope::logger(), "Slack request may error occured"),
-                    };
+                    .exec();
                 }
                 Ok(())
             })

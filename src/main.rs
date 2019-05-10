@@ -12,14 +12,9 @@ use std::sync::Mutex;
 use slog::Drain;
 
 fn init_logger(filter_level: slog::Level) -> slog::Logger {
-    let drain = Mutex::new(
-                slog_term::FullFormat::new(
-                    slog_term::TermDecorator::new()
-                    .build()
-                )
+    let drain = Mutex::new(slog_term::FullFormat::new(slog_term::TermDecorator::new().build())
                     .use_local_timestamp()
-                    .build()
-                )
+                    .build())
                     .filter_level(filter_level);
 
     slog::Logger::root(
