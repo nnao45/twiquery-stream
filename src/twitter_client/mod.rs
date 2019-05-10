@@ -20,12 +20,10 @@ use exec as Exec;
 
 use serde::Deserialize;
 
-use slog::{slog_error,slog_debug};
-use slog_scope::{error,debug};
+use slog::{slog_error};
+use slog_scope::{error};
 
-use std::time::Duration;
-
-#[derive(Deserialize, Debug)]
+#[derive(Deserialize, Debug, Clone)]
 pub struct Config {
     consumer_key: String,
     consumer_secret: String,
@@ -51,9 +49,9 @@ pub struct TwitterClient {
 }
 
 impl TwitterClient {
-    pub fn new(cfg: Config) -> Self {
+    pub fn new(cfg: &Config) -> Self {
         TwitterClient {
-                config: cfg,
+                config: cfg.to_owned(),
         }
     }
 
@@ -92,22 +90,7 @@ impl TwitterClient {
                 Ok(())
             })
             .map_err(|e| {
-                let msg = format!("{}", e);
-                error!("stream error: {}", msg);
-
-                let mut base_timeout = 30;
-                let mut clj = move || {
-                    base_timeout *= 2;
-                    if base_timeout == 60 * 60 {
-                        std::process::exit(1)
-                    }
-                    base_timeout
-                };
-                if msg == "420 <unknown status code>" {
-                    let sleep_time = clj();
-                    debug!("stream api return 420, sleep {}", sleep_time);
-                    std::thread::sleep(Duration::from_secs(sleep_time))
-                }
+                error!("error: {}", e);
             });
 
         rt::run(bot);
