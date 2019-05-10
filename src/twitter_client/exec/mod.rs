@@ -9,6 +9,7 @@ use curl::Error as CurlError;
 use serde::{Serialize, Deserialize};
 
 use slog::{slog_info,slog_error};
+use slog_scope::{info,error};
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct TweiqueryData {
@@ -67,11 +68,11 @@ impl Executer {
 
     pub fn exec(self) {
         let data = &self.data.attachments[0];
-        slog_info!(slog_scope::logger(), "{} [{}]\n{}", data.title, data.footer, &data.fields[0].value);
+        info!("{} [{}]\n{}", data.title, data.footer, &data.fields[0].value);
         if self.post_slack_enabled {
             match self.exec_curl() {
-                Ok(()) => slog_info!(slog_scope::logger(), "Slack request done"),
-                _ => slog_error!(slog_scope::logger(), "Slack request may error occured"),
+                Ok(()) => info!("Slack request done"),
+                _ => error!("Slack request may error occured"),
             };
         }
     }

@@ -20,6 +20,7 @@ use exec as Exec;
 use serde::Deserialize;
 
 use slog::{slog_error};
+use slog_scope::{error};
 
 #[derive(Deserialize, Debug)]
 pub struct Config {
@@ -87,7 +88,7 @@ impl TwitterClient {
                 }
                 Ok(())
             })
-            .map_err(|e| slog_error!(slog_scope::logger(), "error: {}", e));
+            .map_err(|e| error!("error: {}", e));
 
         rt::run(bot);
     }
