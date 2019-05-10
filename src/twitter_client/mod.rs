@@ -8,8 +8,6 @@ extern crate snailquote;
 extern crate curl;
 extern crate slog_scope;
 
-use curl::Error as CurlError;
-
 use twitter_stream::{TwitterStreamBuilder};
 use twitter_stream::rt::{self, Future, Stream};
 use twitter_stream_message::StreamMessage;
@@ -21,9 +19,9 @@ use exec as Exec;
 
 use serde::Deserialize;
 
-use slog::{slog_info, slog_error, slog_crit};
+use slog::{slog_info, slog_error};
 
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Deserialize, Debug)]
 pub struct Config {
     consumer_key: String,
     consumer_secret: String,
@@ -86,7 +84,7 @@ impl TwitterClient {
                     .exec_console()
                     .exec_curl() {
                         Ok(()) => slog_info!(slog_scope::logger(), "Slack request done"),
-                        CurlError => slog_error!(slog_scope::logger(), "Slack request may error occured: {:#?}", CurlError),
+                        _ => slog_error!(slog_scope::logger(), "Slack request may error occured"),
                     };
                 }
                 Ok(())

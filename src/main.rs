@@ -1,6 +1,6 @@
 mod twitter_client;
 
-#[macro_use(slog_o,slog_b,slog_record,slog_record_static,slog_debug,slog_log,slog_trace,slog_info,slog_warn,slog_error,slog_crit,slog_kv)]
+#[macro_use(slog_o)]
 extern crate slog;
 
 extern crate slog_term;

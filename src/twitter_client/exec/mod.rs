@@ -1,17 +1,14 @@
 extern crate curl;
 extern crate chrono;
 
-use std::io::{stdout, Write, Read, Error};
+use std::io::{Read};
 
 use curl::easy::{Easy, List};
 use curl::Error as CurlError;
 
-use chrono::Local;
-
 use serde::{Serialize, Deserialize};
 
 use slog::{slog_info};
-//use slog_scope::debug;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct TweiqueryData {
