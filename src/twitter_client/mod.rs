@@ -7,6 +7,7 @@ extern crate chrono;
 extern crate snailquote;
 extern crate curl;
 extern crate slog_scope;
+extern crate tokio_timer;
 
 use twitter_stream::{TwitterStreamBuilder};
 use twitter_stream::rt::{self, Future, Stream};
@@ -21,6 +22,8 @@ use serde::Deserialize;
 
 use slog::{slog_error};
 use slog_scope::{error};
+
+use std::time::Duration;
 
 #[derive(Deserialize, Debug)]
 pub struct Config {
@@ -88,7 +91,22 @@ impl TwitterClient {
                 }
                 Ok(())
             })
-            .map_err(|e| error!("error: {}", e));
+            .map_err(|e| {
+                let msg = format!("{}", e);
+                error!("stream error: {}", msg);
+
+                let mut base_timeout = 30;
+                let mut clj = move || {
+                    base_timeout *= 2;
+                    if base_timeout == 60 * 60 {
+                        std::process::exit(1)
+                    }
+                    base_timeout
+                };
+                if msg == "420 <unknown status code>" {
+                    std::thread::sleep(Duration::from_secs(clj()))
+                }
+            });
 
         rt::run(bot);
     }

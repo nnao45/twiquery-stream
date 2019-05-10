@@ -70,15 +70,22 @@ impl Executer {
         let data = &self.data.attachments[0];
         info!("{} [{}]\n{}", data.title, data.footer, &data.fields[0].value);
         if self.post_slack_enabled {
-            match self.exec_curl() {
-                Ok(()) => info!("Slack request done"),
-                _ => error!("Slack request may error occured"),
-            };
+            for _ in 1..5 {
+                match self.exec_curl() {
+                    Ok(()) => {
+                        info!("Slack request done");
+                        break
+                        },
+                    _ => {
+                        error!("Slack request may error occured");
+                    },
+                }
+            }
         }
     }
 
-    fn exec_curl(self) -> Result<(), CurlError> {
-        let row = self.data;
+    pub fn exec_curl(&self) -> Result<(), CurlError> {
+        let row = &self.data;
         let row_str = serde_json::to_string(&row).unwrap_or("{\"text\": \"error occured\"}".to_string());
         let mut bytes = row_str.as_bytes();
         let mut easy = Easy::new();
