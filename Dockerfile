@@ -10,8 +10,8 @@ RUN set -eux; \
     apt-get install -y --no-install-recommends \
         git \
         libssl-dev
-RUN git clone https://github.com/nnao45/twiquery-batch
-WORKDIR /twiquery-batch
+RUN git clone https://github.com/nnao45/twiquery-stream
+WORKDIR /twiquery-stream
 RUN cargo build --release
 
 FROM debian:9.9-slim
@@ -21,5 +21,5 @@ RUN apt-get update && apt-get install -y \
         tzdata
 RUN cp /usr/share/zoneinfo/Asia/Tokyo /etc/localtime && \
     echo "Asia/Tokyo" > /etc/timezone
-COPY --from=builder /twiquery-batch/target/release/twiquery-batch .
-CMD ["./twiquery-batch"]
+COPY --from=builder /twiquery-stream/target/release/twiquery-stream .
+CMD ["./twiquery-stream"]
