@@ -20,8 +20,8 @@ use exec as Exec;
 
 use serde::Deserialize;
 
-use slog::{slog_error};
-use slog_scope::{error};
+use slog::{slog_error,slog_debug};
+use slog_scope::{error,debug};
 
 use std::time::Duration;
 
@@ -104,7 +104,9 @@ impl TwitterClient {
                     base_timeout
                 };
                 if msg == "420 <unknown status code>" {
-                    std::thread::sleep(Duration::from_secs(clj()))
+                    let sleep_time = clj();
+                    debug!("stream api return 420, sleep {}", sleep_time);
+                    std::thread::sleep(Duration::from_secs(sleep_time))
                 }
             });
 
