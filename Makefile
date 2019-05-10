@@ -7,13 +7,17 @@ ifeq ($(DOTENV_EXISTS), 0)
 endif
 
 # general
-VERSION = 0.0.1
+VERSION = $(shell ./version.sh)
 NAME = twiquery-batch
 TARGET = $(NAME)
 DOCKER_REPO = nnao45
 
 $(TARGET):
 	cargo build --release
+
+.PHONY: version
+version:
+	@echo $(VERSION)
 
 .PHONY: run
 run:
