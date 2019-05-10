@@ -40,11 +40,11 @@ fn main() {
     slog_stdlog::init().unwrap();
     slog_scope::scope(&slog_scope::logger().new(slog_o!("scope" => "1")), || {
         loop {
+            twitter_client::TwitterClient::new(&config).watch();
             let mut counter = create_counter(30);
             let sleep_time = counter();
             error!("stream api error return, sleep {}", sleep_time);
             std::thread::sleep(Duration::from_secs(sleep_time));
-            twitter_client::TwitterClient::new(&config).watch();
         }
     });
 }
