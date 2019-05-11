@@ -1,6 +1,6 @@
 # twiquery-stream
 
-[![docker](https://img.shields.io/badge/docker-0.1.9-blue.svg)](https://hub.docker.com/r/nnao45/twiquery-stream/tags)
+[![docker](https://img.shields.io/badge/docker-0.1.10-blue.svg)](https://hub.docker.com/r/nnao45/twiquery-stream/tags)
 
 ```shell
 $ cat <<EOF > ./.env                                                                                                                                        CONSUMER_KEY: <

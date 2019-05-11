@@ -56,12 +56,13 @@ impl TwitterClient {
         }
     }
 
-    pub fn watch(self) {
+    pub fn watch(self) -> bool {
         let consumer_key: &str = &self.config.consumer_key;
         let consumer_secret: &str = &self.config.consumer_secret;
         let access_token: &str = &self.config.access_token;
         let access_token_secret: &str = &self.config.access_token_secret;
         let track: &str = &self.config.track;
+        let mut reset_flg = false;
         let bot = TwitterStreamBuilder::filter(twitter_stream::Token::new(
                     consumer_key,
                     consumer_secret,
@@ -74,6 +75,7 @@ impl TwitterClient {
             .flatten_stream()
             .for_each(move |json| {
                 if let Ok(StreamMessage::Tweet(tweet)) = StreamMessage::from_str(&json) {
+                    reset_flg = true;
                     let lang = format!("{:?}", &tweet.lang);
                     let fileter_lang = format!("Some(\"{}\")", &self.config.filter_lang);
                     if lang != fileter_lang && &self.config.filter_lang != "none" {
@@ -96,10 +98,12 @@ impl TwitterClient {
                 }
                 Ok(())
             })
-            .map_err(|e| {
+            .map_err(move |e| {
+                reset_flg = false;
                 error!("error: {}", e);
             });
 
         rt::run(bot);
+        reset_flg
     }
 }

@@ -41,7 +41,9 @@ fn main() {
     slog_scope::scope(&slog_scope::logger().new(slog_o!("scope" => "1")), || {
         let mut counter = create_counter(30);
         loop {
-            twitter_client::TwitterClient::new(&config).watch();
+            if twitter_client::TwitterClient::new(&config).watch() {
+                counter = create_counter(30);
+            };
             std::thread::sleep(Duration::from_secs(counter()));
         }
     });
