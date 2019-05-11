@@ -76,7 +76,7 @@ impl TwitterClient {
                 if let Ok(StreamMessage::Tweet(tweet)) = StreamMessage::from_str(&json) {
                     let lang = format!("{:?}", &tweet.lang);
                     let fileter_lang = format!("Some(\"{}\")", &self.config.filter_lang);
-                    if lang != fileter_lang {
+                    if lang != fileter_lang && &self.config.filter_lang != "none" {
                         error!("this tweet lang is not {}, lang is {}, abort", fileter_lang, lang);
                         return Ok(())
                     }
