@@ -42,9 +42,7 @@ fn main() {
         let mut counter = create_counter(30);
         loop {
             twitter_client::TwitterClient::new(&config).watch();
-            let sleep_time = counter();
-            error!("stream api error return, sleep {}", sleep_time);
-            std::thread::sleep(Duration::from_secs(sleep_time));
+            std::thread::sleep(Duration::from_secs(counter()));
         }
     });
 }
@@ -56,6 +54,7 @@ fn create_counter(mut base_timeout :u64) -> Box<FnMut() -> u64> {
         if base_timeout == 60 * 60 {
             std::process::exit(1)
         }
+        error!("stream api error return, sleep {}", &base_timeout);
         base_timeout
     };
 
