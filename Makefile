@@ -30,7 +30,7 @@ clean:
 .PHONY: docker-build
 docker-build:
 	docker rmi -f $(DOCKER_REPO)/$(TARGET):latest
-	docker build -t $(DOCKER_REPO)/$(TARGET):latest .
+	docker build --no-cache -t $(DOCKER_REPO)/$(TARGET):latest .
 	docker tag $(DOCKER_REPO)/$(TARGET):latest $(DOCKER_REPO)/$(TARGET):$(VERSION)
 
 .PHONY: docker-push
