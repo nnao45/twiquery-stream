@@ -39,10 +39,11 @@ fn main() {
     let _scope_guard = slog_scope::set_global_logger(logger);
     slog_stdlog::init().unwrap();
     slog_scope::scope(&slog_scope::logger().new(slog_o!("scope" => "1")), || {
-        let mut counter = create_counter(30);
+        let base_timeout = 30;
+        let mut counter = create_counter(base_timeout);
         loop {
             if twitter_client::TwitterClient::new(&config).watch() {
-                counter = create_counter(30);
+                counter = create_counter(base_timeout);
             };
             std::thread::sleep(Duration::from_secs(counter()));
         }
