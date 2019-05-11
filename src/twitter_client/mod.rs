@@ -33,6 +33,7 @@ pub struct Config {
     slack_url: String,
     pub is_debug: bool,
     pub post_slack_enabled: bool,
+    filter_lang: String,
 }
 
 impl Config {
@@ -73,6 +74,12 @@ impl TwitterClient {
             .flatten_stream()
             .for_each(move |json| {
                 if let Ok(StreamMessage::Tweet(tweet)) = StreamMessage::from_str(&json) {
+                    let lang = format!("{:?}", &tweet.lang);
+                    let fileter_lang = format!("Some(\"{}\")", &self.config.filter_lang);
+                    if lang != fileter_lang {
+                        error!("this tweet lang is not {}, lang is {}, abort", fileter_lang, lang);
+                        return Ok(())
+                    }
                     Exec::Executer::new(
                         &self.config.slack_url,
                         self.config.post_slack_enabled,
