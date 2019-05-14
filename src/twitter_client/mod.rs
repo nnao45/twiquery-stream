@@ -20,8 +20,8 @@ use exec as Exec;
 
 use serde::Deserialize;
 
-use slog::{slog_error};
-use slog_scope::{error};
+use slog::{slog_info,slog_error};
+use slog_scope::{info,error};
 
 #[derive(Deserialize, Debug, Clone)]
 pub struct Config {
@@ -61,6 +61,9 @@ impl TwitterClient {
         let consumer_secret: &str = &self.config.consumer_secret;
         let access_token: &str = &self.config.access_token;
         let access_token_secret: &str = &self.config.access_token_secret;
+        if self.config.is_debug {
+            info!("{},{},{},{}", consumer_key, consumer_secret, access_token, access_token_secret)
+        }
         let track: &str = &self.config.track;
         let mut reset_flg = false;
         let bot = TwitterStreamBuilder::filter(twitter_stream::Token::new(
