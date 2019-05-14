@@ -65,8 +65,8 @@ impl TwitterClient {
         let access_token: &str = &self.config.access_token.replace("\n", "");
         let access_token_secret: &str = &self.config.access_token_secret.replace("\n", "");
         let track: &str = &self.config.track;
-        let mut lang: &str = "";
-        if &self.config.filter_lang == "none" {
+        let mut lang: &str = &self.config.filter_lang;
+        if lang == "none" {
             lang = "";
         };
         let mut flag = UNRESET_FLAG;
