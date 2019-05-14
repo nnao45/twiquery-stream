@@ -6,17 +6,27 @@ ENV RUSTUP_HOME=/usr/local/rustup \
     OPENSSL_INCLUDE_DIR=/usr/include/openssl \
     RUST_VERSION=%%RUST-VERSION%%
 RUN set -eux; \
-    apt-get update; \
+    apt-get update && \
     apt-get install -y --no-install-recommends \
         git \
         libssl-dev
-RUN git clone https://github.com/nnao45/twiquery-stream
+
+# Build Cache Dependency Library
+RUN mkdir /twiquery-stream
+COPY Cargo.toml Cargo.lock /twiquery-stream/
 WORKDIR /twiquery-stream
+RUN mkdir -p src/ && \
+    touch src/lib.rs
+RUN cargo build --release
+
+# Build Base Library
+COPY . .
 RUN cargo build --release
 
 FROM debian:9.9-slim
 ENV DEBIAN_FRONTEND=noninteractive
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && \
+    apt-get install -y \
         ca-certificates \
         tzdata
 RUN cp /usr/share/zoneinfo/Asia/Tokyo /etc/localtime && \

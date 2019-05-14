@@ -57,13 +57,10 @@ impl TwitterClient {
     }
 
     pub fn watch(self) -> bool {
-        let consumer_key: &str = &self.config.consumer_key;
-        let consumer_secret: &str = &self.config.consumer_secret;
-        let access_token: &str = &self.config.access_token;
-        let access_token_secret: &str = &self.config.access_token_secret;
-        if self.config.is_debug {
-            info!("{},{},{},{}", consumer_key, consumer_secret, access_token, access_token_secret)
-        }
+        let consumer_key: &str = &self.config.consumer_key.replace("\n", "");
+        let consumer_secret: &str = &self.config.consumer_secret.replace("\n", "");
+        let access_token: &str = &self.config.access_token.replace("\n", "");
+        let access_token_secret: &str = &self.config.access_token_secret.replace("\n", "");
         let track: &str = &self.config.track;
         let mut reset_flg = false;
         let bot = TwitterStreamBuilder::filter(twitter_stream::Token::new(
