@@ -20,8 +20,8 @@ use exec as Exec;
 
 use serde::Deserialize;
 
-use slog::{slog_info,slog_error};
-use slog_scope::{info,error};
+use slog::{slog_error};
+use slog_scope::{error};
 
 #[derive(Deserialize, Debug, Clone)]
 pub struct Config {
@@ -35,6 +35,10 @@ pub struct Config {
     pub post_slack_enabled: bool,
     filter_lang: String,
 }
+
+pub const RESET_FLAG: u64 = 0;
+pub const UNRESET_FLAG: u64 = 1;
+pub const RETRY_FLAG: u64 = 2;
 
 impl Config {
     pub fn new() -> Result<Self, ()> {
@@ -56,13 +60,13 @@ impl TwitterClient {
         }
     }
 
-    pub fn watch(self) -> bool {
+    pub fn watch(self) -> u64 {
         let consumer_key: &str = &self.config.consumer_key.replace("\n", "");
         let consumer_secret: &str = &self.config.consumer_secret.replace("\n", "");
         let access_token: &str = &self.config.access_token.replace("\n", "");
         let access_token_secret: &str = &self.config.access_token_secret.replace("\n", "");
         let track: &str = &self.config.track;
-        let mut reset_flg = false;
+        let mut flag = RESET_FLAG;
         let bot = TwitterStreamBuilder::filter(twitter_stream::Token::new(
                     consumer_key,
                     consumer_secret,
@@ -75,7 +79,7 @@ impl TwitterClient {
             .flatten_stream()
             .for_each(move |json| {
                 if let Ok(StreamMessage::Tweet(tweet)) = StreamMessage::from_str(&json) {
-                    reset_flg = true;
+                    flag = RESET_FLAG;
                     let lang = &tweet.lang.unwrap_or(std::borrow::Cow::Borrowed("none"));
                     let fileter_lang = &self.config.filter_lang;
                     if lang != fileter_lang && fileter_lang != "none" {
@@ -99,11 +103,15 @@ impl TwitterClient {
                 Ok(())
             })
             .map_err(move |e| {
-                reset_flg = false;
-                error!("error: {}", e);
+                let msg: &str = &format!("{}", e);
+                error!("{}", msg);
+                match msg {
+                    "420 <unknown status code>" => flag = UNRESET_FLAG,
+                    _ => flag = RETRY_FLAG,
+                }
             });
 
         rt::run(bot);
-        reset_flg
+        flag
     }
 }
