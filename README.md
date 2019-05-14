@@ -1,6 +1,6 @@
 # twiquery-stream
 
-[![docker](https://img.shields.io/badge/docker-0.1.17-blue.svg)](https://hub.docker.com/r/nnao45/twiquery-stream/tags)
+[![docker](https://img.shields.io/badge/docker-0.1.18-blue.svg)](https://hub.docker.com/r/nnao45/twiquery-stream/tags)
 
 [![asciicast](https://asciinema.org/a/Q6bbb19zncsbbEEbHhUM1ngHv.svg)](https://asciinema.org/a/Q6bbb19zncsbbEEbHhUM1ngHv)
 

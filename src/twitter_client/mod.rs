@@ -20,8 +20,8 @@ use exec as Exec;
 
 use serde::Deserialize;
 
-use slog::{slog_error};
-use slog_scope::{error};
+use slog::{slog_info,slog_error};
+use slog_scope::{info,error};
 
 #[derive(Deserialize, Debug, Clone)]
 pub struct Config {
@@ -68,6 +68,10 @@ impl TwitterClient {
         let mut lang: &str = &self.config.filter_lang;
         if lang == "none" {
             lang = "";
+        };
+        if self.config.is_debug {
+            info!("track: {}", track);
+            info!("lanuage: {}", lang);
         };
         let mut flag = UNRESET_FLAG;
         let bot = TwitterStreamBuilder::filter(twitter_stream::Token::new(
