@@ -22,7 +22,7 @@ RUN mkdir -p src/ && \
 RUN cargo build --release
 
 ## Build Base Library
-COPY /src/ .
+COPY . .
 RUN cargo build --release
 
 # Setup Running Container

@@ -11,6 +11,8 @@ use serde::{Serialize, Deserialize};
 use slog::{slog_info,slog_error};
 use slog_scope::{info,error};
 
+use std::time::Duration;
+
 #[derive(Serialize, Deserialize, Debug)]
 pub struct TweiqueryData {
     attachments : Vec<TweiqueryDataAttachments>,
@@ -80,6 +82,7 @@ impl Executer {
                         error!("Slack request may error occured");
                     },
                 }
+                std::thread::sleep(Duration::from_secs(5));
             }
         }
     }
