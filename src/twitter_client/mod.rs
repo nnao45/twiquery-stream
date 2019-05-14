@@ -66,6 +66,10 @@ impl TwitterClient {
         let access_token: &str = &self.config.access_token.replace("\n", "");
         let access_token_secret: &str = &self.config.access_token_secret.replace("\n", "");
         let track: &str = &self.config.track;
+        let mut lang: &str = "";
+        if &self.config.filter_lang != "none" {
+            lang = "";
+        };
         let mut flag = RESET_FLAG;
         let bot = TwitterStreamBuilder::filter(twitter_stream::Token::new(
                     consumer_key,
@@ -73,6 +77,7 @@ impl TwitterClient {
                     access_token,
                     access_token_secret,
                 ))
+            .language(lang)
             .track(Some(track))
             .listen()
             .unwrap()
@@ -80,12 +85,6 @@ impl TwitterClient {
             .for_each(move |json| {
                 if let Ok(StreamMessage::Tweet(tweet)) = StreamMessage::from_str(&json) {
                     flag = RESET_FLAG;
-                    let lang = &tweet.lang.unwrap_or(std::borrow::Cow::Borrowed("none"));
-                    let fileter_lang = &self.config.filter_lang;
-                    if lang != fileter_lang && fileter_lang != "none" {
-                        error!("this tweet lang is not {}, lang is {}, abort", fileter_lang, lang);
-                        return Ok(())
-                    }
                     Exec::Executer::new(
                         &self.config.slack_url,
                         self.config.post_slack_enabled,
