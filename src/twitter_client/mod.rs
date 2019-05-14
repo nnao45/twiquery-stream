@@ -36,9 +36,8 @@ pub struct Config {
     filter_lang: String,
 }
 
-pub const RESET_FLAG: u64 = 0;
-pub const UNRESET_FLAG: u64 = 1;
-pub const RETRY_FLAG: u64 = 2;
+pub const RESET_FLAG: bool = true;
+pub const UNRESET_FLAG: bool = false;
 
 impl Config {
     pub fn new() -> Result<Self, ()> {
@@ -60,17 +59,17 @@ impl TwitterClient {
         }
     }
 
-    pub fn watch(self) -> u64 {
+    pub fn watch(self) -> bool {
         let consumer_key: &str = &self.config.consumer_key.replace("\n", "");
         let consumer_secret: &str = &self.config.consumer_secret.replace("\n", "");
         let access_token: &str = &self.config.access_token.replace("\n", "");
         let access_token_secret: &str = &self.config.access_token_secret.replace("\n", "");
         let track: &str = &self.config.track;
         let mut lang: &str = "";
-        if &self.config.filter_lang != "none" {
+        if &self.config.filter_lang == "none" {
             lang = "";
         };
-        let mut flag = RESET_FLAG;
+        let mut flag = UNRESET_FLAG;
         let bot = TwitterStreamBuilder::filter(twitter_stream::Token::new(
                     consumer_key,
                     consumer_secret,
@@ -84,7 +83,6 @@ impl TwitterClient {
             .flatten_stream()
             .for_each(move |json| {
                 if let Ok(StreamMessage::Tweet(tweet)) = StreamMessage::from_str(&json) {
-                    flag = RESET_FLAG;
                     Exec::Executer::new(
                         &self.config.slack_url,
                         self.config.post_slack_enabled,
@@ -106,7 +104,7 @@ impl TwitterClient {
                 error!("{}", msg);
                 match msg {
                     "420 <unknown status code>" => flag = UNRESET_FLAG,
-                    _ => flag = RETRY_FLAG,
+                    _ => flag = RESET_FLAG,
                 }
             });
 

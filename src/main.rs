@@ -44,12 +44,7 @@ fn main() {
         loop {
             match twitter_client::TwitterClient::new(&config).watch() {
                 twitter_client::RESET_FLAG =>  counter = create_counter(base_timeout),
-                twitter_client::RETRY_FLAG => {
-                    std::thread::sleep(Duration::from_secs(5));
-                    continue
-                },
                 twitter_client::UNRESET_FLAG => (),
-                _  => error!("function watch() return unknown flag"),
             };
             std::thread::sleep(Duration::from_secs(counter()));
         }
