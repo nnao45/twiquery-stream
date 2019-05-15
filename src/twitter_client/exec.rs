@@ -1,18 +1,3 @@
-extern crate curl;
-extern crate chrono;
-
-use std::io::{Read};
-
-use curl::easy::{Easy, List};
-use curl::Error as CurlError;
-
-use serde::{Serialize, Deserialize};
-
-use slog::{slog_info,slog_error};
-use slog_scope::{info,error};
-
-use std::time::Duration;
-
 #[derive(Serialize, Deserialize, Debug)]
 pub struct TweiqueryData {
     attachments : Vec<TweiqueryDataAttachments>,
