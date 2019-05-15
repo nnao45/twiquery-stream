@@ -91,3 +91,44 @@ impl TwitterClient {
         flag
     }
 }
+
+#[cfg(test)]
+mod twitter_client_tests {
+    use std::env;
+    use super::Config;
+    #[test]
+    fn config_load_test() {
+        let dummy_consumer_key = "dummy_consumer_key";
+        let dummy_consumer_secret = "dummy_consumer_key";
+        let dummy_access_token = "dummy_access_token";
+        let dummy_access_token_secret = "dummy_access_token_secret";
+        let dummy_track = "dummy_track";
+        let dummy_slack_url = "https://dummy.slack.com";
+        let dummy_is_debug = true;
+        let dummy_slack_enabled = true;
+        let dummy_filter_lang = "ja";
+        env::set_var("CONSUMER_KEY", dummy_consumer_key);
+        env::set_var("CONSUMER_SECRET",dummy_consumer_secret);
+        env::set_var("ACCESS_TOKEN", dummy_access_token);
+        env::set_var("ACCESS_TOKEN_SECRET", dummy_access_token_secret);
+        env::set_var("TRACK", dummy_track);
+        env::set_var("SLACK_URL", dummy_slack_url);
+        env::set_var("IS_DEBUG", format!("{}", dummy_is_debug));
+        env::set_var("POST_SLACK_ENABLED", format!("{}", dummy_slack_enabled));
+        env::set_var("FILTER_LANG", dummy_filter_lang);
+        match Config::new() {
+            Ok(config) => {
+                assert_eq!(dummy_consumer_key, config.consumer_key);
+                assert_eq!(dummy_consumer_secret, config.consumer_secret);
+                assert_eq!(dummy_access_token, config.access_token);
+                assert_eq!(dummy_access_token_secret, config.access_token_secret);
+                assert_eq!(dummy_track, config.track);
+                assert_eq!(dummy_slack_url, config.slack_url);
+                assert_eq!(dummy_is_debug, config.is_debug);
+                assert_eq!(dummy_slack_enabled, config.post_slack_enabled);
+                assert_eq!(dummy_filter_lang, config.filter_lang);
+            },
+            _ => panic!(),
+        }
+    }
+}

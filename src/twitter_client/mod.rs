@@ -1,5 +1,6 @@
 include!("twitter_client.rs");
 include!("exec.rs");
+include!("test_server.rs");
 
 extern crate tweetust;
 extern crate twitter_stream;
@@ -29,3 +30,4 @@ use serde::Serialize;
 
 use slog::{slog_info,slog_error};
 use slog_scope::{info,error};
+

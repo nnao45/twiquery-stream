@@ -23,6 +23,10 @@ version:
 run:
 	cargo run --release
 
+.PHONY: test
+test:
+	cargo test
+
 .PHONY: clean
 clean:
 	cargo clean
