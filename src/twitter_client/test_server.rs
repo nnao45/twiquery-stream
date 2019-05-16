@@ -16,17 +16,20 @@ macro_rules! t {
     };
 }
 
+#[allow(dead_code)]
 pub struct Server {
     messages: Option<Sender<Message>>,
     addr: SocketAddr,
     thread: Option<thread::JoinHandle<()>>,
 }
 
+#[allow(dead_code)]
 enum Message {
     Read(String),
     Write(String),
 }
 
+#[allow(dead_code)]
 fn run(listener: &TcpListener, rx: &Receiver<Message>) {
     let mut socket = BufReader::new(listener.accept().unwrap().0);
     for msg in rx.iter() {
@@ -122,6 +125,7 @@ fn run(listener: &TcpListener, rx: &Receiver<Message>) {
     assert!(dst.len() == 0);
 }
 
+#[allow(dead_code)]
 fn lines_match(expected: &str, mut actual: &str) -> bool {
     for (i, part) in expected.split("[..]").enumerate() {
         match actual.find(part) {
@@ -137,6 +141,7 @@ fn lines_match(expected: &str, mut actual: &str) -> bool {
     actual.is_empty() || expected.ends_with("[..]")
 }
 
+#[allow(dead_code)]
 impl Server {
     pub fn new() -> Server {
         let listener = t!(TcpListener::bind("127.0.0.1:0"));

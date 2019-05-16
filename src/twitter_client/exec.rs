@@ -96,11 +96,10 @@ impl Executer {
 
 #[cfg(test)]
 mod exec_tests {
-    use std::env;
     use super::{Executer, TweiqueryData, Server};
 
     #[test]
-    fn exec_curl_test() {
+    fn exec_test() {
         let dummy_slack_enabled = true;
         let dummy_data = TweiqueryData::new("dummy_track", "dummy", "@dummy", "Dummy Hello World!!", "1970-01-01 00:00:00 +00:00", "999999999999999");
         let s = Server::new();
@@ -112,9 +111,6 @@ mod exec_tests {
         );
         s.send("HTTP/1.1 200 OK\r\n\r\n");
         let e = Executer::new(&s.url("/"), dummy_slack_enabled, dummy_data);
-        match e.exec_curl() {
-            Ok(()) => (),
-            Err(e) => panic!("{} failed with {:?}", stringify!($e), e),
-        }
+        e.exec()
     }
 }

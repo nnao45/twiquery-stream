@@ -16,6 +16,8 @@ use slog_scope::{error};
 
 use std::time::Duration;
 
+use twitter_client::Streamer;
+
 fn init_logger(filter_level: slog::Level) -> slog::Logger {
     let drain = Mutex::new(slog_term::FullFormat::new(slog_term::TermDecorator::new().build())
                     .use_local_timestamp()
@@ -42,7 +44,7 @@ fn main() {
         let base_timeout = 30;
         let mut counter = create_counter(base_timeout);
         loop {
-            match twitter_client::TwitterClient::new(&config).watch() {
+            match twitter_client::TwitterClient::new(&config).watch(twitter_client::TwitterStreamer::new()) {
                 twitter_client::RESET_FLAG =>  counter = create_counter(base_timeout),
                 twitter_client::UNRESET_FLAG => (),
             };
