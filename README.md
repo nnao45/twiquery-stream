@@ -2,7 +2,7 @@
 
 [![docker](https://img.shields.io/badge/docker-0.1.20-blue.svg)](https://hub.docker.com/r/nnao45/twiquery-stream/tags)
 
-[![asciicast](https://asciinema.org/a/Q6bbb19zncsbbEEbHhUM1ngHv.svg)](https://asciinema.org/a/Q6bbb19zncsbbEEbHhUM1ngHv)
+[![asciicast](https://asciinema.org/a/247263.svg)](https://asciinema.org/a/247263)
 
 ```shell
 $ cat <<EOF > ./.env                                                                                                                                        CONSUMER_KEY: <
