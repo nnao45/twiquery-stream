@@ -87,7 +87,9 @@ impl TwitterClient {
                 }
             });
 
+        info!("Start watch steram api");
         streamer.stream_run(bot);
+        error!("Stop watch steram api");
         flag
     }
 }

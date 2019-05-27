@@ -57,7 +57,7 @@ fn create_counter(mut base_timeout :u64) -> Box<FnMut() -> u64> {
 // 変数xはスタック上に確保されるので、moveを使ってxのコピーの所有権をクロージャに移してあげる。
     let clj = move || {
         base_timeout *= 2;
-        if base_timeout == 60 * 60 {
+        if base_timeout >= 960 {
             std::process::exit(1)
         }
         error!("stream api error return, sleep {}", &base_timeout);
