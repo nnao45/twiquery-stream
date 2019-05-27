@@ -75,6 +75,8 @@ impl TwitterClient {
                         ),
                     )
                     .exec();
+                } else if let Err(e) = StreamMessage::from_str(&json)  {
+                    error!("error is {:?}, json is {}", e, &json);
                 }
                 Ok(())
             })
