@@ -1,13 +1,13 @@
 [package]
 name = "twiquery-stream"
-version = "0.1.21"
+version = "0.1.22"
 authors = ["nnao45 <n4sekai5y@gmail.com>"]
 edition = "2018"
 
 [dependencies]
 curl = "0.4.21"
 twitter-stream = "0.9"
-twitter-stream-message = "0.3.0"
+twitter-stream-message = "0.3"
 tweetust = "0.9"
 chrono = "0.4.0"
 snailquote = "0.2"

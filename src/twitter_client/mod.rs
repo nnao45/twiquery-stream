@@ -10,7 +10,8 @@ extern crate snailquote;
 extern crate curl;
 extern crate slog_scope;
 extern crate tokio_timer;
-
+extern crate serde;
+extern crate serde_json as json;
 use twitter_stream::{TwitterStreamBuilder};
 use twitter_stream::rt::{self, Future, Stream};
 use twitter_stream_message::StreamMessage;

@@ -61,22 +61,24 @@ impl TwitterClient {
             .unwrap()
             .flatten_stream()
             .for_each(move |json| {
-                if let Ok(StreamMessage::Tweet(tweet)) = StreamMessage::from_str(&json) {
-                    Executer::new(
-                        &self.config.slack_url,
-                        self.config.post_slack_enabled,
-                        TweiqueryData::new(
-                            &self.config.track,
-                            &format!("{}", &tweet.user.name)[..],
-                            &format!("{}", &tweet.user.screen_name)[..],
-                            &unescape(&format!("{:?}", &tweet.text)).unwrap()[..],
-                            &format!("{}",tweet.created_at.with_timezone(&Local))[..],
-                            &format!("{}", &tweet.id)[..],
-                        ),
-                    )
-                    .exec();
-                } else if let Err(e) = StreamMessage::from_str(&json)  {
-                    error!("error is {:?}, json is {}", e, &json);
+                match json::from_str(&json) {
+                    Ok(StreamMessage::Tweet(tweet)) => {
+                        Executer::new(
+                            &self.config.slack_url,
+                            self.config.post_slack_enabled,
+                            TweiqueryData::new(
+                                &self.config.track,
+                                &format!("{}", &tweet.user.name)[..],
+                                &format!("{}", &tweet.user.screen_name)[..],
+                                &unescape(&format!("{:?}", &tweet.text)).unwrap()[..],
+                                &format!("{}",tweet.created_at.with_timezone(&Local))[..],
+                                &format!("{}", &tweet.id)[..],
+                            ),
+                        )
+                        .exec();
+                    },
+                    Err(e) => error!("maybe error occured, error: {:?}, json: {}", e, &json),
+                    _ => error!("maybe error occured, but i dont know"),
                 }
                 Ok(())
             })
