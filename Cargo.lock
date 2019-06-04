@@ -1708,7 +1708,7 @@ dependencies = [
 
 [[package]]
 name = "twiquery-stream"
-version = "0.1.22"
+version = "0.1.23"
 dependencies = [
  "chrono 0.4.6 (registry+https://github.com/rust-lang/crates.io-index)",
  "curl 0.4.21 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -1725,7 +1725,7 @@ dependencies = [
  "tokio-timer 0.1.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "tweetust 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "twitter-stream 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "twitter-stream-message 0.3.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "twitter-stream-message 0.3.0 (git+https://github.com/nnao45/twitter-stream-message.git)",
 ]
 
 [[package]]
@@ -1751,7 +1751,7 @@ dependencies = [
 [[package]]
 name = "twitter-stream-message"
 version = "0.3.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
+source = "git+https://github.com/nnao45/twitter-stream-message.git#2b6090feef41710addcb16add070122ee07ffe26"
 dependencies = [
  "chrono 0.4.6 (registry+https://github.com/rust-lang/crates.io-index)",
  "serde 1.0.91 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -2065,7 +2065,7 @@ dependencies = [
 "checksum try-lock 0.2.2 (registry+https://github.com/rust-lang/crates.io-index)" = "e604eb7b43c06650e854be16a2a03155743d3752dd1c943f6829e26b7a36e382"
 "checksum tweetust 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)" = "80fd03738867d12eaaf3a9085ac1fa4a84f46365b21d489dcefacdfb49145a4c"
 "checksum twitter-stream 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)" = "9e3a5074588328d862bc1c42fa15ba138120b89ff17e9109c613214f120cde9e"
-"checksum twitter-stream-message 0.3.0 (registry+https://github.com/rust-lang/crates.io-index)" = "255acaa2a52019bc9d99bbd86734c429405f60eebc9c295cc9e0fff67c3863d9"
+"checksum twitter-stream-message 0.3.0 (git+https://github.com/nnao45/twitter-stream-message.git)" = "<none>"
 "checksum typeable 0.1.2 (registry+https://github.com/rust-lang/crates.io-index)" = "1410f6f91f21d1612654e7cc69193b0334f909dcf2c790c4826254fbb86f8887"
 "checksum typenum 1.10.0 (registry+https://github.com/rust-lang/crates.io-index)" = "612d636f949607bdf9b123b4a6f6d966dedf3ff669f7f045890d3a4a73948169"
 "checksum unicase 1.4.2 (registry+https://github.com/rust-lang/crates.io-index)" = "7f4765f83163b74f957c797ad9253caf97f103fb064d3999aea9568d09fc8a33"
