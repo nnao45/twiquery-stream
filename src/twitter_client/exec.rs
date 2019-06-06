@@ -27,8 +27,8 @@ impl TweiqueryData {
                 color: "#27aeff".to_string(),
                 fields: vec![
                     TweiqueryDataAttachmentsFields {
-                        title: format!(":twitter: https://twitter.com/statuses/{}", id),
-                        value: format!("```{}```", tweet),
+                        title: format!(":twitter: Tweet"),
+                        value: format!("```{}```\nhttps://twitter.com/statuses/{}", tweet, id),
                     },
                 ],
                 footer: format!("{}", date),
